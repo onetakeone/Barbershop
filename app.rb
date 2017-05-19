@@ -7,7 +7,17 @@ require 'SQLite3'
 #enable sessions
 #---------------------------------
 configure do
-  enable :sessions     	  
+  enable :sessions 
+  @db = SQLite3::Database.new 'barbershop.db' 
+  @db.execute 'CREATE TABLE IF NOT EXISTS 
+  	"Clients" 
+  		(
+		  "ID" INTEGER PRIMARY KEY AUTOINCREMENT, 
+		  "client" TEXT, 
+		  "date" TEXT, 
+		  "barber" TEXT, 
+		  color "TEXT"
+		)'     	  
 end
 
 def loggedin tempo
@@ -66,12 +76,6 @@ get '/admin' do
 	else
 		erb :admin
 	end
-	db = SQLite3::Database.new("./public/records.sqlite3")
-	db.execute "SELECT * FROM Records" do |var|
-		puts var
-		puts "===="
-	end
-	db.close
 end
 
 post '/admin' do
@@ -95,7 +99,7 @@ end
 post '/visit' do
 	@name = params[:name]
 	@number = params[:number]
-	@comments = params[:comments]
+	@dates = params[:dates]
 	@barber = params[:barber]
 	@color = params[:color]
 
