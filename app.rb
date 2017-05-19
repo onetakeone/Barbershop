@@ -26,7 +26,6 @@ get '/' do
 	else
 		erb :about
 	end
-
 end
 
 #requesting login form - directs to login.erb
@@ -41,7 +40,6 @@ post '/login' do
 	session[:id] = params[:login]
 	session[:pass] = params[:pass]
 	loginarr = { :login => "enter login", :pass => "enter pass" }
-	
 	@error = loginarr.select {|key, _| params[key] == "" }.values.join(", ")
 	if @error != ''
 		session[:id] = nil
@@ -63,13 +61,11 @@ end
 get '/admin' do	
 	@output = File.open "./public/visits.txt", "r"
 	@messoutput = File.open "./public/messages.txt", "r"
-
 	if session[:id] == 'admin' && session[:pass] == '123'
 		erb :list
 	else
 		erb :admin
 	end
-
 	db = SQLite3::Database.new("./public/records.sqlite3")
 	db.execute "SELECT * FROM Records" do |var|
 		puts var
@@ -82,9 +78,7 @@ post '/admin' do
 	@output = File.open "./public/visits.txt", "r"
 	@messoutput = File.open "./public/messages.txt", "r"
 	@login = params[:login]
-	@pass = params[:pass]s
-
-
+	@pass = params[:pass]
 	if @login == 'admin' && @pass == '123'
 		erb :list
 	else
@@ -99,24 +93,21 @@ get '/visit' do
 end
 
 post '/visit' do
-
 	@name = params[:name]
 	@number = params[:number]
 	@comments = params[:comments]
 	@barber = params[:barber]
 	@color = params[:color]
 
-	array = { :name => "name?", :number => "number?" }
+	array = { :name => "name?", :number => "number?", :barber => "Barber?" }
 	@error = array.select {|key,_| params[key] == "" }.values.join(", ")
 	if @error != ''
 		erb :visit
 	else
-		input = File.open "./public/visits.txt", "a"
-		input.write "Client: #{@name} <br> Cell: #{@number} <br> Comment: #{@comments} <br> Barber: #{@barber} <br> Color: #{@color} <br><br>" 
-		input.close
-		
+	#	input = File.open "./public/visits.txt", "a"
+	#	input.write "Client: #{@name} <br> Cell: #{@number} <br> Comment: #{@comments} <br> Barber: #{@barber} <br> Color: #{@color} <br><br>" 
+	#	input.close
 		erb :about
-			
 	end
 end
 

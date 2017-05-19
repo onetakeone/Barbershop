@@ -30,10 +30,10 @@
 
   <div class="form-group">
   <label>Choose your barber:</label>  
-    <select name="barber"class="form-control" id="test-id-1">                                         <!-- id -->
-      <option> </option>
-      <option>Vasya</option>
-      <option>Roman</option>
+    <select name="barber"class="form-control" id="test-id-1" value="<%= @barber %>"> 
+      <option> </option>                                        <!-- id -->
+      <option <%= @barber == 'Vasya' ? 'selected' : '' %>>Vasya</option>
+      <option <%= @barber == 'Roman' ? 'selected' : '' %>>Roman</option>
     </select>
   </div>  
 
