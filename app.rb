@@ -8,15 +8,19 @@ require 'SQLite3'
 #---------------------------------
 configure do
   enable :sessions 
-  @db = SQLite3::Database.new 'barbershop.db' 
-  @db.execute 'CREATE TABLE IF NOT EXISTS 
-  	"Clients" 
+  def database_function
+  	SQLite3::Database.new 'barbershop.db' 
+  end
+  create_db = database_function
+  create_db.execute 'CREATE TABLE IF NOT EXISTS 
+  	"Clients"
   		(
 		  "ID" INTEGER PRIMARY KEY AUTOINCREMENT, 
 		  "client" TEXT, 
+		  "number" TEXT,
 		  "date" TEXT, 
 		  "barber" TEXT, 
-		  color "TEXT"
+		  "color" TEXT
 		)'     	  
 end
 
@@ -108,10 +112,9 @@ post '/visit' do
 	if @error != ''
 		erb :visit
 	else
-	#	input = File.open "./public/visits.txt", "a"
-	#	input.write "Client: #{@name} <br> Cell: #{@number} <br> Comment: #{@comments} <br> Barber: #{@barber} <br> Color: #{@color} <br><br>" 
-	#	input.close
-		erb :about
+		set_record = database_function
+		set_record.execute 'INSERT INTO "Clients" (client, number, date, barber, color) values (?, ?, ?, ?, ?)', [@name, @number, @dates, @barber, @color]
+		erb 'record set'
 	end
 end
 
