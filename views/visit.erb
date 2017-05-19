@@ -5,6 +5,8 @@
     $('.test-class-1').css('color','blue');
   
     $('#color').simplecolorpicker();
+
+    $('#datetimepicker').datetimepicker();
     
   })
 </script>
@@ -23,9 +25,9 @@
     <input name="number" type="text" class="form-control test-class-1" placeholder="cell number" value="<%= @number %>">    <!-- class -->
   </div>
    
-  <div class="form-group" >
+  <div class="form-group">
     <label>Date</label>
-    <input name="date" type="text" class="form-control" placeholder="enter date" value="<%= @dates %>">
+    <input id="datetimepicker" name="date" type="text" class="form-control" placeholder="enter date" value="<%= @dates %>">
   </div>
 
   <div class="form-group">
