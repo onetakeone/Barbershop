@@ -1,6 +1,5 @@
 <H2>VISIT RECORDS</H2>
 <table class="table">
-		<%= @list %>
 		<thead>
 			<tr>
 				<th>id</th>
@@ -12,15 +11,14 @@
 			</tr>
 		</thead>
 		<tbody>	
-			<% @list.each_with_index do |var,i| %>
+			<% @list.each do |var| %>
 			<tr>
-				<td><%= var[0] %></td>
-				<td><%= var[1] %></td>
-				<td><%= var[2] %></td>
-				<td><%= var[3] %></td>
-				<td><%= var[4] %></td>
-				<td><%= var[5] %></td>
-				<td><%= var[6] %></td>
+				<td><%= var['ID'] %></td>
+				<td><%= var['client'] %></td>
+				<td><%= var['number'] %></td>
+				<td><%= var['date'] %></td>
+				<td><%= var['barber'] %></td>
+				<td><%= var['color'] %></td>
 			</tr>
 			<% end %>
 		</tbody>

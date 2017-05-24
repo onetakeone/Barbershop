@@ -6,13 +6,31 @@ require 'SQLite3'
 
 #enable sessions
 #---------------------------------
+def database_function
+  	db = SQLite3::Database.new 'barbershop.db3'  #функция подключается к базе данных // function connects to database
+  	db.results_as_hash = true
+  	return db
+end
+
+def is_barber_exists? db, name
+	#db.execute('select * from Barbers where Barber = ? ', [name]).length > 0
+	db.execute('select * from Barbers where Barber = ? ', [name]).length > 0
+end
+
+def set_barbers db, barbers 		
+	barbers.each do |var|                      #if no barbers with name - insert barber into table
+		if !is_barber_exists? db, var 					
+			db.execute 'insert INTO Barbers (Barber) values (?)', [var]
+		end
+	end
+end
+
 configure do
   enable :sessions 
-  def database_function
-  	SQLite3::Database.new 'barbershop.db3' 
-  end
-  create_db = database_function
-  create_db.execute 'CREATE TABLE IF NOT EXISTS 
+  
+  create_db = database_function  
+#creates table in database
+  create_db.execute 'CREATE TABLE IF NOT EXISTS   
   	"Clients"
   		(
 		  "ID" INTEGER PRIMARY KEY AUTOINCREMENT, 
@@ -21,7 +39,14 @@ configure do
 		  "date" TEXT, 
 		  "barber" TEXT, 
 		  "color" TEXT
-		)'   
+		)'  
+  create_db.execute 'CREATE TABLE IF NOT EXISTS 
+  	"Barbers"
+  		(
+		  "ID" INTEGER PRIMARY KEY AUTOINCREMENT, 
+		  "Barber" TEXT
+		)'  
+  set_barbers create_db, ['Vasya', 'Roman', 'Ilia']    #function > connect_to_database, array_with_names
 end
 
 def loggedin tempo
