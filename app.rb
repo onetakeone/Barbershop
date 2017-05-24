@@ -4,23 +4,22 @@ require 'sinatra'
 require 'sinatra/reloader'
 require 'SQLite3'
 
-#enable sessions
-#---------------------------------
+
 def database_function
   	db = SQLite3::Database.new 'barbershop.db3'  #функция подключается к базе данных // function connects to database
-  	db.results_as_hash = true
+  	db.results_as_hash = true						#function brings out hash
   	return db
 end
 
 def is_barber_exists? db, name
-	#db.execute('select * from Barbers where Barber = ? ', [name]).length > 0
-	db.execute('select * from Barbers where Barber = ? ', [name]).length > 0
+	#db.execute('select * from Barbers where Barber = ? ', [name]).length > 0    
+	db.execute('select * from Barbers where Barber = ? ', [name]).length > 0	#checks whether barber exists or not
 end
 
 def set_barbers db, barbers 		
 	barbers.each do |var|                      #if no barbers with name - insert barber into table
 		if !is_barber_exists? db, var 					
-			db.execute 'insert INTO Barbers (Barber) values (?)', [var]
+			db.execute 'insert INTO Barbers (Barber) values (?)', [var]		 #
 		end
 	end
 end
@@ -108,6 +107,8 @@ get '/admin' do
 	end
 end
 
+#sends @list variable to list.erb with descending order
+#---------------------------------------------------------
 get '/list' do
 		db_output = database_function
 		@list = db_output.execute 'select * from Clients order by id desc' 
@@ -122,6 +123,7 @@ get '/visit' do
 	loggedin :visit
 end
 
+#
 post '/visit' do
 	barbers_menu = database_function
 	@barbername = barbers_menu.execute 'select Barber from Barbers'
