@@ -34,8 +34,8 @@
   <label>Choose your barber:</label>  
     <select name="barber" class="form-control" id="test-id-1"> 
       <option> </option>
-      <% @barbername.each do |item| %>                                        <!-- id -->
-      <option <%= @barber == item['Barber'] ? 'selected' : ''%>> <%= item['Barber'] %> </option>   <!-- selected - shows this position in broswer as default -->
+      <% @barbername.each do |item| %>                                       
+      <option <%= @barber == item['Barber'] ? 'selected' : ''%> > <%= item['Barber'] %> </option>   <!-- selected - shows this position in broswer as default -->
       <% end %>
     </select>
   </div>  
