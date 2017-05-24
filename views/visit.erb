@@ -27,15 +27,16 @@
    
   <div class="form-group">
     <label>Date</label>
-    <input id="datetimepicker" name="date" type="text" class="form-control" placeholder="enter date" value="<%= @dates %>">
+    <input name="date" type="text" class="form-control" placeholder="enter date" value="<%= @dates %>">
   </div>
 
   <div class="form-group">
   <label>Choose your barber:</label>  
-    <select name="barber"class="form-control" id="test-id-1" value="<%= @barber %>"> 
-      <option> </option>                                        <!-- id -->
-      <option <%= @barber == 'Vasya' ? 'selected' : '' %>>Vasya</option>   <!-- selected - shows this position in broswer as default -->
-      <option <%= @barber == 'Roman' ? 'selected' : '' %>>Roman</option>
+    <select name="barber" class="form-control" id="test-id-1"> 
+      <option> </option>
+      <% @barbername.each do |item| %>                                        <!-- id -->
+      <option <%= @barber == item['Barber'] ? 'selected' : ''%>> <%= item['Barber'] %> </option>   <!-- selected - shows this position in broswer as default -->
+      <% end %>
     </select>
   </div>  
 

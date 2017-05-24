@@ -25,11 +25,19 @@ def set_barbers db, barbers
 	end
 end
 
+def loggedin tempo
+	if session[:id].nil?
+		erb 'Sorry, you need to be <a href="/login"> logged in</a>'
+	else
+		erb tempo
+	end
+end
+
 configure do
   enable :sessions 
   
   create_db = database_function  
-#creates table in database
+  #creates table in database
   create_db.execute 'CREATE TABLE IF NOT EXISTS   
   	"Clients"
   		(
@@ -49,13 +57,9 @@ configure do
   set_barbers create_db, ['Vasya', 'Roman', 'Ilia']    #function > connect_to_database, array_with_names
 end
 
-def loggedin tempo
-	if session[:id].nil?
-		erb 'Sorry, you need to be <a href="/login"> logged in</a>'
-	else
-		erb tempo
-	end
-end
+#before do
+	#code that will work before every get/post
+#end
 
 #if not logged in - redirect to login form
 #-------------------------------------------
@@ -113,10 +117,14 @@ end
 #visit list
 #---------------------------------------------------------
 get '/visit' do
+	barbers_menu = database_function
+	@barbername = barbers_menu.execute 'select Barber from Barbers'
 	loggedin :visit
 end
 
 post '/visit' do
+	barbers_menu = database_function
+	@barbername = barbers_menu.execute 'select Barber from Barbers'
 	@name = params[:name]
 	@number = params[:number]
 	@dates = params[:dates]
