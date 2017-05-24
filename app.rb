@@ -53,8 +53,8 @@ end
 post '/login' do
 	session[:id] = params[:login]
 	session[:pass] = params[:pass]
-	loginarr = { :login => "enter login", :pass => "enter pass" }
-	@error = loginarr.select {|key, _| params[key] == "" }.values.join(", ")
+	login_hash = { :login => "enter login", :pass => "enter pass" }
+	@error = login_hash.select {|key, _| params[key] == "" }.values.join(", ")
 	if @error != ''
 		session[:id] = nil
 		erb :login
@@ -65,7 +65,7 @@ post '/login' do
 end
 
 #if not logged in - redirects to login form / else - opens about.erb
-#--------------------------------------------------------------------
+#----------------------	----------------------------------------------
 get '/about' do
 	loggedin :about
 end
@@ -73,24 +73,16 @@ end
 #admin
 #--------------------------------------------------------
 get '/admin' do	
-	@output = File.open "./public/visits.txt", "r"
-	@messoutput = File.open "./public/messages.txt", "r"
 	if session[:id] == 'admin' && session[:pass] == '123'
-		erb :list
-	else
-		erb :admin
-	end
-end
-
-post '/admin' do
-	@output = File.open "./public/visits.txt", "r"
-	@messoutput = File.open "./public/messages.txt", "r"
-	@login = params[:login]
-	@pass = params[:pass]
-	if @login == 'admin' && @pass == '123'
-		erb :list
-	else
-		erb :admin
+		@a = []
+		db_output = database_function
+		db_output.execute 'select * from Clients' do |row|
+   			@a << row	
+   		end
+   		db_output.close
+   		erb :list
+   	else
+   		erb :login
 	end
 end
 
@@ -107,13 +99,13 @@ post '/visit' do
 	@barber = params[:barber]
 	@color = params[:color]
 
-	array = { :name => "name?", :number => "number?", :barber => "Barber?" }
-	@error = array.select {|key,_| params[key] == "" }.values.join(", ")
+	error_hash = { :name => "name?", :number => "number?", :barber => "Barber?" }
+	@error = error_hash.select {|key,_| params[key] == "" }.values.join(", ")
 	if @error != ''
 		erb :visit
 	else
 		set_record = database_function
-		set_record.execute 'INSERT INTO "Clients" (client, number, date, barber, color) values (?, ?, ?, ?, ?)', [@name, @number, @dates, @barber, @color]
+		set_record.execute 'INSERT INTO "Clients" (client, number, date, barber, color) values (?, ?, ?, ?, ?)', [@name, @number, @dates, @barber, @color] #instead values (xxx, yyy) to secure from ' exploite
 		erb 'record set'
 	end
 end
@@ -129,7 +121,6 @@ post '/contact' do
 	@email = params[:email]
 #	@message = params[:message]
 require 'pony'
-
 Pony.mail(	
     	:to => 'limepassion@gmail.com',
     	:from => params[:email],
@@ -146,19 +137,6 @@ Pony.mail(
     		:domain               => 'localhost.localdomain'
 		  })
 erb :contact
-
-#	contactarr = { :email => "enter email", :message => "enter message" }
-#	@error = contactarr.select {|key, _| params[key] == ""}.values.join(", ")
-#	if @error != ''
-#		erb :contact
-#	else
-#		messinput = File.open "./public/messages.txt", "a"
-#		messinput.write "#{@email} <br> #{@message}<br><br>" 
-#		messinput.close
-#		erb :about
-#	end
-
-	
 end
 
 #LOGOUT
