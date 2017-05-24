@@ -1,4 +1,28 @@
 <H2>VISIT RECORDS</H2>
-<%= @a %>
+<table class="table">
+		<%= @list %>
+		<thead>
+			<tr>
+				<th>id</th>
+				<th>name</th>
+				<th>number</th>
+				<th>date</th>
+				<th>name</th>
+				<th>color</th>
+			</tr>
+		</thead>
+		<tbody>	
+			<% @list.each_with_index do |var,i| %>
+			<tr>
+				<td><%= var[0] %></td>
+				<td><%= var[1] %></td>
+				<td><%= var[2] %></td>
+				<td><%= var[3] %></td>
+				<td><%= var[4] %></td>
+				<td><%= var[5] %></td>
+				<td><%= var[6] %></td>
+			</tr>
+			<% end %>
+		</tbody>
+</table>  
 
- 

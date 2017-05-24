@@ -9,7 +9,7 @@ require 'SQLite3'
 configure do
   enable :sessions 
   def database_function
-  	SQLite3::Database.new 'barbershop.db' 
+  	SQLite3::Database.new 'barbershop.db3' 
   end
   create_db = database_function
   create_db.execute 'CREATE TABLE IF NOT EXISTS 
@@ -21,7 +21,7 @@ configure do
 		  "date" TEXT, 
 		  "barber" TEXT, 
 		  "color" TEXT
-		)'     	  
+		)'   
 end
 
 def loggedin tempo
@@ -60,8 +60,7 @@ post '/login' do
 		erb :login
 	else
 		erb :about
-	end
-	
+	end	
 end
 
 #if not logged in - redirects to login form / else - opens about.erb
@@ -74,16 +73,16 @@ end
 #--------------------------------------------------------
 get '/admin' do	
 	if session[:id] == 'admin' && session[:pass] == '123'
-		@a = []
-		db_output = database_function
-		db_output.execute 'select * from Clients' do |row|
-   			@a << row	
-   		end
-   		db_output.close
-   		erb :list
+		redirect :list 
    	else
    		erb :login
 	end
+end
+
+get '/list' do
+		db_output = database_function
+		@list = db_output.execute 'select * from Clients order by id desc' 
+   		erb :list
 end
 
 #visit list
